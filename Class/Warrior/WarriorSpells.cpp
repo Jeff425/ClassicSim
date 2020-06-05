@@ -40,6 +40,7 @@
 #include "UnbridledWrath.h"
 #include "Warrior.h"
 #include "Whirlwind.h"
+#include "CancelHeroicStrike.h"
 
 WarriorSpells::WarriorSpells(Warrior* warrior) : CharacterSpells(warrior), warr(warrior) {
     this->berserking = new Berserking(warrior, ResourceType::Rage, 5);
@@ -68,6 +69,7 @@ WarriorSpells::WarriorSpells(Warrior* warrior) : CharacterSpells(warrior), warr(
     this->warr_mh_attack = new MainhandAttackWarrior(warrior, this);
     this->warr_oh_attack = new OffhandAttackWarrior(warrior, this);
     this->whirlwind = new Whirlwind(warrior, this);
+    this->cancel_heroic_strike = new CancelHeroicStrike(warrior, this);
 
     auto buff = static_cast<BattleShoutBuff*>(warrior->get_raid_control()->get_shared_party_buff("Battle Shout", warrior->get_party()));
     if (buff == nullptr) {
@@ -137,6 +139,8 @@ WarriorSpells::WarriorSpells(Warrior* warrior) : CharacterSpells(warrior), warr(
 
     this->sword_spec = new SwordSpecialization(warrior);
     this->unbridled_wrath = new UnbridledWrath(warrior);
+
+    add_spell_group({cancel_heroic_strike});
 }
 
 WarriorSpells::~WarriorSpells() {

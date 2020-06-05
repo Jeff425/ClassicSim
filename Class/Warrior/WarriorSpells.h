@@ -35,6 +35,7 @@ class SwordSpecialization;
 class UnbridledWrath;
 class Warrior;
 class Whirlwind;
+class CancelHeroicStrike;
 
 class WarriorSpells : public CharacterSpells {
 public:
@@ -80,6 +81,8 @@ public:
     void cancel_heroic_strike();
     bool is_heroic_strike_queued() const;
 
+    CancelHeroicStrike* get_cancel_heroic_strike() const;
+
 private:
     Warrior* warr;
 
@@ -117,6 +120,8 @@ private:
 
     SwordSpecialization* sword_spec;
     UnbridledWrath* unbridled_wrath;
+
+    CancelHeroicStrike* cancel_heroic_strike;
 
     void prepare_set_of_combat_iterations_class_specific() override;
 };

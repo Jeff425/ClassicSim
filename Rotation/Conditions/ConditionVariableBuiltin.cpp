@@ -10,6 +10,7 @@
 #include "Druid.h"
 #include "Engine.h"
 #include "MainhandAttack.h"
+#include "OffhandAttack.h"
 #include "Rogue.h"
 #include "SimSettings.h"
 #include "Utils/Check.h"
@@ -42,6 +43,11 @@ bool ConditionVariableBuiltin::condition_fulfilled() const {
     case BuiltinVariables::SwingTimer: {
         auto mh_attack = pchar->get_spells()->get_mh_attack();
         double delta = pchar->get_engine()->get_current_priority() - std::max(mh_attack->get_last_used(), 0.0);
+        return cmp_values(delta);
+    }
+    case BuiltinVariables::OHSwingTimer: {
+        auto oh_attack = pchar->get_spells()->get_oh_attack();
+        double delta = pchar->get_engine()->get_current_priority() - std::max(oh_attack->get_last_used(), 0.0);
         return cmp_values(delta);
     }
     case BuiltinVariables::AutoShotTimer: {
@@ -81,6 +87,8 @@ QString ConditionVariableBuiltin::condition_description() const {
         return QString("Time Remaining Until Execute %1 %2 seconds").arg(comparator_as_string()).arg(QString::number(rhs_value, 'f', 1));
     if (builtin == BuiltinVariables::SwingTimer)
         return QString("Time Since Mainhand Swing %1 %2 seconds").arg(comparator_as_string()).arg(QString::number(rhs_value, 'f', 1));
+    if (builtin == BuiltinVariables::OHSwingTimer)
+        return QString("Time Since Offhand Swing %1 %2 seconds").arg(comparator_as_string()).arg(QString::number(rhs_value, 'f', 1));
     if (builtin == BuiltinVariables::AutoShotTimer)
         return QString("Time Since Auto Shot %1 %2 seconds").arg(comparator_as_string()).arg(QString::number(rhs_value, 'f', 1));
     if (builtin == BuiltinVariables::MeleeAP)
@@ -120,6 +128,8 @@ BuiltinVariables ConditionVariableBuiltin::get_builtin_variable(const QString& v
         return BuiltinVariables::TimeRemainingExecute;
     if (var_name == "time_since_swing")
         return BuiltinVariables::SwingTimer;
+    if (var_name == "time_since_OHswing")
+        return BuiltinVariables::OHSwingTimer;
     if (var_name == "time_since_auto_shot")
         return BuiltinVariables::AutoShotTimer;
     if (var_name == "melee_ap")
